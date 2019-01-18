@@ -9,7 +9,7 @@ import org.mengyun.tcctransaction.TransactionRepository;
 import org.mengyun.tcctransaction.api.TransactionStatus;
 import org.mengyun.tcctransaction.common.TransactionType;
 import org.mengyun.tcctransaction.support.TransactionConfigurator;
-
+import org.mengyun.tcctransaction.utils.SimpleMailSender;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +24,11 @@ public class TransactionRecovery {
     private TransactionConfigurator transactionConfigurator;
 
     public void startRecover() {
-
+        logger.info("recover...begin");
         List<Transaction> transactions = loadErrorTransactions();
 
         recoverErrorTransactions(transactions);
+        logger.info("recover...end");
     }
 
     private List<Transaction> loadErrorTransactions() {
@@ -48,7 +49,14 @@ public class TransactionRecovery {
 
             if (transaction.getRetriedCount() > transactionConfigurator.getRecoverConfig().getMaxRetryCount()) {
 
-                logger.error(String.format("recover failed with max retry count,will not try again. txid:%s, status:%s,retried count:%d,transaction content:%s", transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount(), JSON.toJSONString(transaction)));
+                String errorMsg = String.format("recover failed with max retry count,will not try again. gid:%s,bid:%s, status:%s,retried count:%d", transaction.getXid().getGlobalTransactionId(),transaction.getXid().getBranchQualifier(), transaction.getStatus().getId(), transaction.getRetriedCount());
+                logger.error(errorMsg);
+                //发送报警邮件
+                SimpleMailSender.asyncSendMail(transactionConfigurator.getRecoverConfig().getMailParam(),"tcc recover failed",errorMsg);
+
+                //将发送邮件标识至为1 更新库表
+                transaction.isSendEmail();
+                transactionConfigurator.getTransactionRepository().update(transaction);
                 continue;
             }
 

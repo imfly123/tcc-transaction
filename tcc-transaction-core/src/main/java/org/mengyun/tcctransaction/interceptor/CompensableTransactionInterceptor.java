@@ -81,7 +81,6 @@ public class CompensableTransactionInterceptor {
         try {
 
             transaction = transactionManager.begin();
-
             try {
                 returnValue = pjp.proceed();
             } catch (Throwable tryingException) {
@@ -123,7 +122,6 @@ public class CompensableTransactionInterceptor {
                     }
                     break;
                 case CANCELLING:
-
                     try {
                         transaction = transactionManager.propagationExistBegin(transactionContext);
                         transactionManager.rollback(asyncCancel);

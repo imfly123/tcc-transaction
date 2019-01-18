@@ -1,5 +1,6 @@
 package org.mengyun.tcctransaction.recover;
 
+import org.mengyun.tcctransaction.utils.MailParam;
 import java.util.Set;
 
 /**
@@ -12,6 +13,8 @@ public interface RecoverConfig {
     public int getRecoverDuration();
 
     public String getCronExpression();
+
+    public MailParam getMailParam();
 
     public Set<Class<? extends Exception>> getDelayCancelExceptions();
 

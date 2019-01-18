@@ -20,7 +20,7 @@ public abstract class CachableTransactionRepository implements TransactionReposi
 
     private int expireDuration = 120;
 
-    private Cache<Xid, Transaction> transactionXidCompensableTransactionCache;
+    private Cache<TransactionXid, Transaction> transactionXidCompensableTransactionCache;
 
     @Override
     public int create(Transaction transaction) {
@@ -117,7 +117,7 @@ public abstract class CachableTransactionRepository implements TransactionReposi
 
     protected abstract int doDelete(Transaction transaction);
 
-    protected abstract Transaction doFindOne(Xid xid);
+    protected abstract Transaction doFindOne(TransactionXid xid);
 
     protected abstract List<Transaction> doFindAllUnmodifiedSince(Date date);
 }

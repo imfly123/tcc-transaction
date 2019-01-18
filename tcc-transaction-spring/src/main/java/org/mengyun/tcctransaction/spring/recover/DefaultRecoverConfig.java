@@ -2,6 +2,8 @@ package org.mengyun.tcctransaction.spring.recover;
 
 import org.mengyun.tcctransaction.OptimisticLockException;
 import org.mengyun.tcctransaction.recover.RecoverConfig;
+import org.mengyun.tcctransaction.utils.MailParam;
+import org.mengyun.tcctransaction.utils.MailServer;
 
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
@@ -14,11 +16,13 @@ public class DefaultRecoverConfig implements RecoverConfig {
 
     public static final RecoverConfig INSTANCE = new DefaultRecoverConfig();
 
-    private int maxRetryCount = 30;
+    private int maxRetryCount = 5;
 
     private int recoverDuration = 120; //120 seconds
 
     private String cronExpression = "0 */1 * * * ?";
+
+    private MailParam mailParam = null;
 
     private int asyncTerminateThreadPoolSize = 1024;
 
@@ -73,5 +77,13 @@ public class DefaultRecoverConfig implements RecoverConfig {
 
     public void setAsyncTerminateThreadPoolSize(int asyncTerminateThreadPoolSize) {
         this.asyncTerminateThreadPoolSize = asyncTerminateThreadPoolSize;
+    }
+
+    public MailParam getMailParam() {
+        return mailParam;
+    }
+
+    public void setMailParam(MailParam mailParam) {
+        this.mailParam = mailParam;
     }
 }

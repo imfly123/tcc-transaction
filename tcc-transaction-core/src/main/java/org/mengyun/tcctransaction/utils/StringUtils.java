@@ -17,4 +17,8 @@ public class StringUtils {
 
         return true;
     }
+
+    public static boolean isEmpty(String value) {
+        return !isNotEmpty(value);
+    }
 }

@@ -35,6 +35,8 @@ public class Transaction implements Serializable {
 
     private long version = 1;
 
+    private int isSendEmail = 0;
+
     private List<Participant> participants = new ArrayList<Participant>();
 
     private Map<String, Object> attachments = new ConcurrentHashMap<String, Object>();
@@ -60,8 +62,8 @@ public class Transaction implements Serializable {
     }
 
 
-    public Xid getXid() {
-        return xid.clone();
+    public TransactionXid getXid() {
+        return this.xid;
     }
 
     public TransactionStatus getStatus() {
@@ -139,5 +141,15 @@ public class Transaction implements Serializable {
         this.lastUpdateTime = new Date();
     }
 
+    public void isSendEmail() {
+        this.isSendEmail = 1;
+    }
 
+    public void setIsSendEmail(int isSendEmail) {
+        this.isSendEmail = isSendEmail;
+    }
+
+    public int getIsSendEmail() {
+        return isSendEmail;
+    }
 }

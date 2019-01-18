@@ -30,7 +30,7 @@ public class TransactionContext implements Serializable {
     }
 
     public TransactionXid getXid() {
-        return xid.clone();
+        return this.xid;
     }
 
     public void setAttachments(Map<String, String> attachments) {
