@@ -5,7 +5,7 @@
 
     <util:properties id="tccjdbc" location="classpath:tccjdbc.properties"/>
 
-    <bean id="mailServer" class="org.mengyun.tcctransaction.utils.MailParam">
+    <bean id="mailParam" class="org.mengyun.tcctransaction.utils.MailParam">
         <property name="password" value="qiyejia2015"/>
         <property name="username" value="ent@sunlands.com"/>
         <property name="host" value="smtpcom.263xmail.com"/>
@@ -21,7 +21,7 @@
         <property name="maxRetryCount" value="5"/>
         <property name="recoverDuration" value="10"/>
         <property name="cronExpression" value="0/10 * * * * ?"/>
-        <property name="mailParam" ref="mailServer"/>
+        <property name="mailParam" ref="mailParam"/>
     </bean>
 
     <bean id="transactionRepository"

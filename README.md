@@ -49,3 +49,6 @@ tcc-transaction不和底层使用的rpc框架耦合，也就是使用doubbo,thri
 如有问题可以在本项目的github issues中提问。或是加微信:changmingxie，为便于识别，麻烦在备注中写下：名字＋所在公司名字＋是否线上使用，作者尽量回答疑问。 
 
 
+1 18
+重试次数达最大次数，发报警邮件
+gid、bid存储类型修改为varcher

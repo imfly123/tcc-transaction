@@ -3,8 +3,6 @@ package org.mengyun.tcctransaction.spring.recover;
 import org.mengyun.tcctransaction.OptimisticLockException;
 import org.mengyun.tcctransaction.recover.RecoverConfig;
 import org.mengyun.tcctransaction.utils.MailParam;
-import org.mengyun.tcctransaction.utils.MailServer;
-
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
