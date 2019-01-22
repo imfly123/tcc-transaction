@@ -49,6 +49,25 @@ tcc-transaction不和底层使用的rpc框架耦合，也就是使用doubbo,thri
 如有问题可以在本项目的github issues中提问。或是加微信:changmingxie，为便于识别，麻烦在备注中写下：名字＋所在公司名字＋是否线上使用，作者尽量回答疑问。 
 
 
-1 18
-重试次数达最大次数，发报警邮件
-gid、bid存储类型修改为varcher
+#tcc-transaction for sunlands
+####1.当重试次数达最大次数，发报警邮件(成功发送后，IS_SEND_EMAIL更为1)
+需要在xml中初始化类MailParam，并设置属性如下
+host主机名 
+username用户名 
+password密码 
+port端口 
+auth是否认证（默认false） 
+timeout超时时间（默认25000ms） 
+from发件人  
+to收件人 (英文逗号相隔)
+subjectPrefix主题前缀(默认空)
+前8项为必填，否则 不发邮件
+
+
+####2.tcc库中的 gid、bid存储类型修改为varcher类型，目的是为了方便查找
+
+####3.事务结束时逻辑删除（IS_DELETE 更为1,原先为物理删除）
+
+####4.存储器只保留了jdbc存储
+
+####5.只是对http-sample进行了测试，dubbo-sample并未测试

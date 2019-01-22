@@ -10,15 +10,15 @@
     <util:properties id="tccjdbc" location="classpath:tccjdbc.properties"/>
 
     <bean id="mailParam" class="org.mengyun.tcctransaction.utils.MailParam">
-        <property name="password" value="qiyejia2015"/>
-        <property name="username" value="ent@sunlands.com"/>
+        <property name="password" value="pw"/>
+        <property name="username" value="un"/>
         <property name="host" value="smtpcom.263xmail.com"/>
         <property name="port" value="25"/>
-        <property name="from" value="ent@sunlands.com"/>
+        <property name="from" value="un"/>
         <property name="subjectPrefix" value="ENV_DEV"/>
         <property name="timeout" value="25000"/>
         <property name="auth" value="true"/>
-        <property name="receivers" value="chengweijie"/>
+        <property name="to" value="to"/>
     </bean>
 
     <bean class="org.mengyun.tcctransaction.spring.recover.DefaultRecoverConfig">

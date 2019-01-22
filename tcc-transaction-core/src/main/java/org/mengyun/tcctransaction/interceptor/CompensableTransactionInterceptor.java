@@ -94,7 +94,6 @@ public class CompensableTransactionInterceptor {
 
                 throw tryingException;
             }
-
             transactionManager.commit(asyncConfirm);
 
         } finally {

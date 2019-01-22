@@ -33,7 +33,7 @@ public class SimpleMailSender {
     public static void sendMail(MailParam mailParam,String subject ,String content ) throws MessagingException {
 
         if (mailParam == null || StringUtils.isEmpty(mailParam.getUsername()) ||StringUtils.isEmpty(mailParam.getPassword()) ||StringUtils.isEmpty(mailParam.getHost()) || mailParam.getPort() == null
-                ||StringUtils.isEmpty(subject) ||StringUtils.isEmpty(content) ||StringUtils.isEmpty(mailParam.getReceivers())){
+                ||StringUtils.isEmpty(subject) ||StringUtils.isEmpty(content)||StringUtils.isEmpty(mailParam.getFrom())||StringUtils.isEmpty(mailParam.getTimeout()) ||StringUtils.isEmpty(mailParam.getTo())){
             logger.warn("邮件参数缺少，不发邮件！");
             return;
         }
@@ -53,16 +53,17 @@ public class SimpleMailSender {
 
         mimehelper.setSentDate(new Date());
         mimehelper.setFrom(mailParam.getFrom());
-        String[] receiverArr = getSystemErrReceiver(mailParam.getReceivers());
+        String[] receiverArr = getSystemErrReceiver(mailParam.getTo());
         mimehelper.setTo(receiverArr);
 
         // 设置主题
         String realSub = StringUtils.isNotEmpty(mailParam.getSubjectPrefix())?"[" + mailParam.getSubjectPrefix() + "]" + subject:subject;
         mimehelper.setSubject(realSub);
         mimehelper.setText(content, true);
-
+        Long statTime = System.currentTimeMillis();
         javaMailSender.send(mine);
         logger.info("send mail success!");
+        logger.info("sendMail cost time:" + (System.currentTimeMillis() - statTime));
     }
 
     public static void asyncSendMail(final MailParam mailParam, final String subject , final String content){
@@ -71,9 +72,7 @@ public class SimpleMailSender {
             @Override
             public void run() {
                 try {
-                    Long statTime = System.currentTimeMillis();
                     sendMail(mailParam,subject,content);
-                    logger.debug("asyncSendMail cost time:" + (System.currentTimeMillis() - statTime));
                 } catch (MessagingException e) {
                     logger.error("asyncSendMail failed!",e);
                 }

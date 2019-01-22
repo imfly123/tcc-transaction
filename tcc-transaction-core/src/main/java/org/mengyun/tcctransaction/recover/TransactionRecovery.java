@@ -47,7 +47,7 @@ public class TransactionRecovery {
 
         for (Transaction transaction : transactions) {
 
-            if (transaction.getRetriedCount() > transactionConfigurator.getRecoverConfig().getMaxRetryCount()) {
+            if (transaction.getRetriedCount() >= transactionConfigurator.getRecoverConfig().getMaxRetryCount()) {
 
                 String errorMsg = String.format("recover failed with max retry count,will not try again. gid:%s,bid:%s, status:%s,retried count:%d", transaction.getXid().getGlobalTransactionId(),transaction.getXid().getBranchQualifier(), transaction.getStatus().getId(), transaction.getRetriedCount());
                 logger.error(errorMsg);

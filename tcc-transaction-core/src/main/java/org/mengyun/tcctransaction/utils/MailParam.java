@@ -9,12 +9,12 @@ public class MailParam implements Serializable {
 	private String host;
 	private String username;
 	private String password;
-	private Integer port = 25;
-	private String auth = "true";
+	private Integer port ;
+	private String auth = "false";
 	private String timeout = "25000";
 	private String from;
     private String subjectPrefix;
-    private String receivers;
+    private String to;
 
 	public String getHost() {
 		return host;
@@ -80,11 +80,11 @@ public class MailParam implements Serializable {
         this.subjectPrefix = subjectPrefix;
     }
 
-    public String getReceivers() {
-        return receivers;
+    public String getTo() {
+        return to;
     }
 
-    public void setReceivers(String receivers) {
-        this.receivers = receivers;
+    public void setTo(String to) {
+        this.to = to;
     }
 }

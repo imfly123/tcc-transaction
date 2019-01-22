@@ -72,15 +72,12 @@ public class TransactionManager {
 
         if (asyncCommit) {
             try {
-                Long statTime = System.currentTimeMillis();
-
                 executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         commitTransaction(transaction);
                     }
                 });
-                logger.debug("async submit cost time:" + (System.currentTimeMillis() - statTime));
             } catch (Throwable commitException) {
                 logger.warn("compensable transaction async submit confirm failed, recovery job will try to confirm later.", commitException);
                 throw new ConfirmingException(commitException);
@@ -119,22 +116,28 @@ public class TransactionManager {
 
 
     private void commitTransaction(Transaction transaction) {
+        Long statTime = System.currentTimeMillis();
         try {
             transaction.commit();
             transactionRepository.delete(transaction);
         } catch (Throwable commitException) {
             logger.warn("compensable transaction confirm failed, recovery job will try to confirm later.", commitException);
             throw new ConfirmingException(commitException);
+        }finally {
+            logger.info("submit cost time:" + (System.currentTimeMillis() - statTime));
         }
     }
 
     private void rollbackTransaction(Transaction transaction) {
+        Long statTime = System.currentTimeMillis();
         try {
             transaction.rollback();
             transactionRepository.delete(transaction);
         } catch (Throwable rollbackException) {
             logger.warn("compensable transaction rollback failed, recovery job will try to rollback later.", rollbackException);
             throw new CancellingException(rollbackException);
+        }finally {
+            logger.info("rollback cost time:" + (System.currentTimeMillis() - statTime));
         }
     }
 

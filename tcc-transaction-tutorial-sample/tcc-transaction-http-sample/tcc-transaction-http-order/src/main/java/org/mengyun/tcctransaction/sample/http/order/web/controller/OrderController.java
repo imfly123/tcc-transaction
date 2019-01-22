@@ -1,6 +1,7 @@
 package org.mengyun.tcctransaction.sample.http.order.web.controller;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.mengyun.tcctransaction.recover.TransactionRecovery;
 import org.mengyun.tcctransaction.sample.http.order.service.AccountServiceImpl;
 import org.mengyun.tcctransaction.sample.http.order.service.PlaceOrderServiceImpl;
 import org.mengyun.tcctransaction.sample.http.order.web.controller.vo.PlaceOrderRequest;
@@ -8,6 +9,8 @@ import org.mengyun.tcctransaction.sample.order.domain.entity.Order;
 import org.mengyun.tcctransaction.sample.order.domain.entity.Product;
 import org.mengyun.tcctransaction.sample.order.domain.repository.ProductRepository;
 import org.mengyun.tcctransaction.sample.order.domain.service.OrderServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by changming.xie on 4/1/16.
@@ -91,6 +95,16 @@ public class OrderController {
                 request.getProductQuantities(), request.getRedPacketPayAmount());
 
         return new RedirectView("payresult/" + merchantOrderNo);
+    }
+
+    private AtomicInteger atomicInteger = new AtomicInteger(0);
+    static final Logger logger = LoggerFactory.getLogger(TransactionRecovery.class.getSimpleName());
+
+
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public void test() {
+        int i = atomicInteger.incrementAndGet();
+        logger.info("atomicInteger:{}" ,i);
     }
 
     @RequestMapping(value = "/payresult/{merchantOrderNo}", method = RequestMethod.GET)

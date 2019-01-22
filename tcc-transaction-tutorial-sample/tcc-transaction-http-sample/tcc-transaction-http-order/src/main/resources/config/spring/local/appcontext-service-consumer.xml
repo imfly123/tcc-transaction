@@ -21,34 +21,34 @@
                 <property name="connectionTimeout" value="2000"/>
                 <property name="maxTotalConnections" value="600"/>
                 <property name="defaultMaxConnectionsPerHost" value="512"/>
-                <property name="soTimeout" value="5000"/>
+                <property name="soTimeout" value="10000"/>
             </bean>
         </property>
     </bean>
 
     <bean id="captialTradeOrderService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:8081/remoting/CapitalTradeOrderService"/>
+        <property name="serviceUrl" value="http://localhost:7101/remoting/CapitalTradeOrderService"/>
         <property name="serviceInterface"
                   value="org.mengyun.tcctransaction.sample.http.capital.api.CapitalTradeOrderService"/>
         <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
     </bean>
 
     <bean id="capitalAccountService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:8081/remoting/CapitalAccountService"/>
+        <property name="serviceUrl" value="http://localhost:7101/remoting/CapitalAccountService"/>
         <property name="serviceInterface"
                   value="org.mengyun.tcctransaction.sample.http.capital.api.CapitalAccountService"/>
         <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
     </bean>
 
     <bean id="redPacketAccountService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:8082/remoting/RedPacketAccountService"/>
+        <property name="serviceUrl" value="http://localhost:7102/remoting/RedPacketAccountService"/>
         <property name="serviceInterface"
                   value="org.mengyun.tcctransaction.sample.http.redpacket.api.RedPacketAccountService"/>
         <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
     </bean>
 
     <bean id="redPacketTradeOrderService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:8082/remoting/RedPacketTradeOrderService"/>
+        <property name="serviceUrl" value="http://localhost:7102/remoting/RedPacketTradeOrderService"/>
         <property name="serviceInterface"
                   value="org.mengyun.tcctransaction.sample.http.redpacket.api.RedPacketTradeOrderService"/>
         <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>

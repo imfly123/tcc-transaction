@@ -2,10 +2,13 @@ package org.mengyun.tcctransaction.sample.http.order.service;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mengyun.tcctransaction.api.Compensable;
+import org.mengyun.tcctransaction.interceptor.CompensableTransactionInterceptor;
 import org.mengyun.tcctransaction.sample.http.capital.api.dto.CapitalTradeOrderDto;
 import org.mengyun.tcctransaction.sample.http.redpacket.api.dto.RedPacketTradeOrderDto;
 import org.mengyun.tcctransaction.sample.order.domain.entity.Order;
 import org.mengyun.tcctransaction.sample.order.domain.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.Calendar;
  */
 @Service
 public class PaymentServiceImpl {
+    static final Logger logger = LoggerFactory.getLogger(CompensableTransactionInterceptor.class.getSimpleName());
 
     @Autowired
     TradeOrderServiceProxy tradeOrderServiceProxy;
@@ -27,7 +31,7 @@ public class PaymentServiceImpl {
     OrderRepository orderRepository;
 
 
-    @Compensable(confirmMethod = "confirmMakePayment", cancelMethod = "cancelMakePayment", asyncConfirm = true)
+    @Compensable(confirmMethod = "confirmMakePayment", cancelMethod = "cancelMakePayment", asyncConfirm = false,asyncCancel = false)
     @Transactional
     public void makePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {
 
@@ -44,18 +48,18 @@ public class PaymentServiceImpl {
             }
         }
 
+        Long statTime = System.currentTimeMillis();
         String result = tradeOrderServiceProxy.record(null, buildCapitalTradeOrderDto(order));
+        Long statTime1 = System.currentTimeMillis();
+
+        logger.info("try captial cost time:" + (statTime1 - statTime));
         String result2 = tradeOrderServiceProxy.record(null, buildRedPacketTradeOrderDto(order));
+        logger.info("try redpacket cost time:" + (System.currentTimeMillis() - statTime1) );
+        logger.info("try captial and redpacket cost time:" + (System.currentTimeMillis() - statTime) );
+
     }
 
     public void confirmMakePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {
-
-
-        try {
-            Thread.sleep(1000l);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         System.out.println("order confirm make payment called. time seq:" + DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd HH:mm:ss"));
 
@@ -69,13 +73,6 @@ public class PaymentServiceImpl {
     }
 
     public void cancelMakePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {
-
-
-        try {
-            Thread.sleep(1000l);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         System.out.println("order cancel make payment called.time seq:" + DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd HH:mm:ss"));
 
